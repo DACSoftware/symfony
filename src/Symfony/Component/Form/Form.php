@@ -532,9 +532,7 @@ class Form implements \IteratorAggregate, FormInterface
         // whether an empty value has been submitted or whether no value has
         // been submitted at all. This is important for processing checkboxes
         // and radio buttons with empty values.
-        if (false === $submittedData) {
-            $submittedData = null;
-        } elseif (is_scalar($submittedData)) {
+        if (is_scalar($submittedData) && !is_bool($submittedData)) {
             $submittedData = (string) $submittedData;
         }
 

@@ -19,7 +19,8 @@
         "php": ">=5.3.3",
         "doctrine/common": "~2.3",
         "twig/twig": "~1.12,>=1.12.3",
-        "psr/log": "~1.0"
+        "psr/log": "~1.0",
+        "phpunit/phpunit": "4.1.*"
     },
     "replace": {
         "symfony/browser-kit": "self.version",

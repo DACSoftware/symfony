@@ -20,23 +20,23 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
  */
-class BooleanToStringTransformer implements DataTransformerInterface
+class ThreeStateBooleanToStringTransformer implements DataTransformerInterface
 {
     /**
      * The value emitted upon transform if the input is true.
      *
      * @var string
      */
-    private $trueValue;
+    private $trueValues;
 
     /**
      * Sets the value emitted upon transform if the input is true.
      *
-     * @param string $trueValue
+     * @param string $trueValues
      */
-    public function __construct($trueValue)
+    public function __construct(array $trueValues = array('true'))
     {
-        $this->trueValue = $trueValue;
+        $this->trueValues = $trueValues;
     }
 
     /**
@@ -51,14 +51,14 @@ class BooleanToStringTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if (null === $value) {
-            return false;
+            return null;
         }
 
         if (!is_bool($value)) {
             throw new TransformationFailedException('Expected a Boolean.');
         }
 
-        return $value ? $this->trueValue : false;
+        return $value ? $this->trueValues[0] : false;
     }
 
     /**
@@ -72,10 +72,14 @@ class BooleanToStringTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (in_array($value, array(null, false), true)) {
-            return false;
+        if (in_array($value, $this->trueValues, true)) {
+            return true;
         }
 
-        return true;
+        if (!is_string($value)) {
+            throw new TransformationFailedException('Expected a string.');
+        }
+
+        return false;
     }
 }

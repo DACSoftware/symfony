@@ -35,13 +35,13 @@ class BooleanToStringTransformerTest extends \PHPUnit_Framework_TestCase
     public function testTransform()
     {
         $this->assertEquals(self::TRUE_VALUE, $this->transformer->transform(true));
-        $this->assertNull($this->transformer->transform(false));
+        $this->assertFalse($this->transformer->transform(false));
     }
 
     // https://github.com/symfony/symfony/issues/8989
     public function testTransformAcceptsNull()
     {
-        $this->assertNull($this->transformer->transform(null));
+        $this->assertFalse($this->transformer->transform(null));
     }
 
     /**
@@ -52,19 +52,13 @@ class BooleanToStringTransformerTest extends \PHPUnit_Framework_TestCase
         $this->transformer->transform('1');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
-    public function testReverseTransformFailsIfInteger()
-    {
-        $this->transformer->reverseTransform(1);
-    }
-
     public function testReverseTransform()
     {
         $this->assertTrue($this->transformer->reverseTransform(self::TRUE_VALUE));
         $this->assertTrue($this->transformer->reverseTransform('foobar'));
         $this->assertTrue($this->transformer->reverseTransform(''));
+        $this->assertTrue($this->transformer->reverseTransform(1));
+        $this->assertFalse($this->transformer->reverseTransform(false));
         $this->assertFalse($this->transformer->reverseTransform(null));
     }
 }

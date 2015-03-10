@@ -12,6 +12,7 @@
 namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 
 class CheckboxTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
 {
@@ -21,7 +22,7 @@ class CheckboxTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
 
         $this->assertFalse($form->getData());
         $this->assertFalse($form->getNormData());
-        $this->assertNull($form->getViewData());
+        $this->assertFalse($form->getViewData());
     }
 
     public function testPassValueToView()
@@ -89,51 +90,17 @@ class CheckboxTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
         $form->submit(null);
 
         $this->assertFalse($form->getData());
-        $this->assertNull($form->getViewData());
+        $this->assertFalse($form->getViewData());
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
     public function testSubmitWithEmptyValueChecked()
     {
-        $form = $this->factory->create('checkbox', null, array(
+        $this->factory->create('checkbox', null, array(
             'value' => '',
         ));
-        $form->submit('');
-
-        $this->assertTrue($form->getData());
-        $this->assertSame('', $form->getViewData());
-    }
-
-    public function testSubmitWithEmptyValueUnchecked()
-    {
-        $form = $this->factory->create('checkbox', null, array(
-            'value' => '',
-        ));
-        $form->submit(null);
-
-        $this->assertFalse($form->getData());
-        $this->assertNull($form->getViewData());
-    }
-
-    public function testSubmitWithEmptyValueAndFalseUnchecked()
-    {
-        $form = $this->factory->create('checkbox', null, array(
-            'value' => '',
-        ));
-        $form->submit(false);
-
-        $this->assertFalse($form->getData());
-        $this->assertNull($form->getViewData());
-    }
-
-    public function testSubmitWithEmptyValueAndTrueChecked()
-    {
-        $form = $this->factory->create('checkbox', null, array(
-            'value' => '',
-        ));
-        $form->submit(true);
-
-        $this->assertTrue($form->getData());
-        $this->assertSame('', $form->getViewData());
     }
 
     /**
